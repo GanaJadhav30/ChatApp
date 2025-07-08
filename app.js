@@ -15,7 +15,10 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  socket.on('user-message',(message)=>{
+    console.log("The new user message is: ",message)
+    io.emit('client-msg',message)
+  })
 });
 
 server.listen(3000, () => {
