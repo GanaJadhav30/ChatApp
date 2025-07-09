@@ -18,7 +18,11 @@ io.on('connection', (socket) => {
   socket.on('user-message',(message)=>{
     console.log("The new user message is: ",message)
     io.emit('client-msg',message)
+    // console.log(userID)
+    io.emit('user-id',userID)
   })
+  const userID = socket.id
+  
 });
 
 server.listen(3000, () => {

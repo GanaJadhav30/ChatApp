@@ -5,21 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      p{
+        font-size: large;
+        color:white;
+        padding: 1rem;
+        border-style: solid;
+        border-color: black;
+        border-width: 2px;
+        margin: 2px;
+      }
+      h2{
+        font-size: large;
+        padding: 1rem;
+        border-style: solid;
+        border-color: black;
+        border-width: 2px;
+        margin: 2px;
+      }
+    </style>
 </head>
 <body class="bg-zinc-700 overflow-hidden min-h-screen relative">
     <div class="w-fit min-h-screen border-2 border-white px-5">
         <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">ChatApp</h1>
     </div>
 
-    <div id="sendmsg" class="bg-[#948979] w-full h-300 absolute top-0 left-73">
-    
+    <div class="bg-[#948979] w-full h-300 absolute top-0 left-73">
+      <p>Chat here:</p>
+
+      <div class="flex">
+        <div id="userId"></div>
+        <div class="w-8/10" id="sendmsg"></div>
+        
+      </div>
+ 
+       
     </div>
 
     <div class="absolute w-8/10 left-73  bottom-0">
-        <form id="form"  class="gap-2 flex justify-end" action="">
+        <form id="form"  class="gap-2 flex justify-end" action="/">
             <input id="message" class="bg-white w-full  rounded-lg p-2" placeholder="Type your message here" type="text">
-            <button id="sendbtn" name="submit" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Send</button>
+            <button id="sendbtn" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Send</button>
         </form>
+        
     </div>
 
     
@@ -30,11 +58,22 @@
       const messageIn = document.getElementById('message')
       const sendbtn = document.getElementById('sendbtn')
       const sendmsg = document.getElementById('sendmsg')
+      const users = document.getElementById('userId')
+
       socket.on('client-msg',(message)=>{
         const p = document.createElement("p")
         p.innerText=message
+        console.log(typeof message); 
         sendmsg.appendChild(p)
         
+      })
+
+      socket.on('user-id',userId=>{
+        console.log(userId)
+        const h = document.createElement('h2')
+        h.innerText ="User-id: " + userId
+        console.log(typeof userId); 
+        users.appendChild(h)
       })
      
       sendbtn.addEventListener('click',(e)=>{
@@ -42,6 +81,18 @@
         console.log(message);
         socket.emit('user-message',message)
       })
+
+      sendbtn.addEventListener('click',()=>{
+        message.value=''
+      })
+
+      const form = document.getElementById('form')
+
+      form.addEventListener('submit',(e)=>{
+        e.preventDefault()
+        
+      })
+
     </script>
 </body>
 </html>
